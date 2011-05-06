@@ -79,6 +79,7 @@
     <Compile Include="Models\AccountAuthorizations.cs" />
     <Compile Include="Models\AccountPreferences.cs" />
     <Compile Include="Models\AssetType.cs" />
+    <Compile Include="Models\Response`1.cs" />
     <Compile Include="Models\ExchangeStatus.cs" />
     <Compile Include="Models\OHLCQuote.cs" />
     <Compile Include="Models\OHLCQuoteCollection.cs" />

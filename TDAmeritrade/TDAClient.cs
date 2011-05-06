@@ -96,7 +96,7 @@ namespace TDAmeritrade
         public User User { get; private set; }
 
         /// <summary>
-        /// Logs in user to the TD Ameritrade service.
+        /// Logs in user to the TD Ameritrade web service.
         /// </summary>
         /// <param name="userid">The user's ID.</param>
         /// <param name="password">The user's password.</param>
@@ -107,7 +107,7 @@ namespace TDAmeritrade
         }
 
         /// <summary>
-        /// Logs in user asynchronously to the TD Ameritrade service.
+        /// Logs in user asynchronously to the TD Ameritrade web service.
         /// </summary>
         /// <param name="userid">The user's ID.</param>
         /// <param name="password">The user's password.</param>
@@ -188,6 +188,39 @@ namespace TDAmeritrade
                 this.User = new User();
                 return new Response<bool>(false, new ResponseError(xml.Element("error").Value));
             });
+        }
+
+        /// <summary>
+        /// Logs out user from the TD Ameritrade web service.
+        /// </summary>
+        /// <returns>The <see cref="T:Response"/>.</returns>
+        public Response LogOut()
+        {
+            return LogOutAsync().Result;
+        }
+
+        /// <summary>
+        /// Logs out user asynchronously from the TD Ameritrade web service.
+        /// </summary>
+        /// <returns>The <see cref="T:Response"/>.</returns>
+        public Task<Response> LogOutAsync()
+        {
+            var url = this.Config.ServiceUrl + "LogOut?source=" + Uri.EscapeDataString(this.App.Key);
+
+            return GetXmlAsync(url)
+                .ContinueWith(task =>
+                {
+                    var xml = task.Result.Root;
+
+                    if (xml.Element("result").Value == "LoggedOut")
+                    {
+                        return new Response();
+                    }
+
+                    this.User = new User();
+                    return new Response(new ResponseError(xml.Element("error").Value));
+                });
+
         }
 
         /// <summary>
