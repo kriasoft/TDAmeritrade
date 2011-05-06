@@ -5,8 +5,13 @@
 
 The latest version is at [http://github.com/rialib/tdameritrade](http://github.com/rialib/tdameritrade)
 
+Download
+--------
+
+ * [TD Ameritrade .NET SDK v1.1.0 Beta.zip](https://github.com/rialib/tdameritrade/raw/master/TD%20Ameritrade%20.NET%20SDK%20v1.1.0%20Beta.zip) (May 06, 2011)
+
 Technologies used
-------------
+-----------------
 
  * [.NET Framework 4.0](http://msdn.microsoft.com/netframework), [C#](http://msdn.microsoft.com/vcsharp)
  * [Task Parallel Library](http://msdn.microsoft.com/en-us/library/dd460717.aspx)
