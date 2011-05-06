@@ -15,7 +15,7 @@ Want to participate in this project?
 ------------------------------------
 
  * Fill free to [fork](https://github.com/rialib/tdameritrade) this repo and [pull back](https://github.com/rialib/tdameritrade/pull/new/master) your updates
- * Participate in [discussions](https://groups.google.com/forum/#!forum/tdameritrade), share your feedback, [submit issues](https://github.com/rialib/tdameritrade/issues)
+ * Participate in [discussions](https://groups.google.com/forum/#!forum/tdasdk), share your feedback, [submit issues](https://github.com/rialib/tdameritrade/issues)
  
 Credits
 -------
