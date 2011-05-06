@@ -214,13 +214,41 @@ namespace TDAmeritrade
 
                     if (xml.Element("result").Value == "LoggedOut")
                     {
+                        this.User = new User();
                         return new Response();
                     }
 
-                    this.User = new User();
                     return new Response(new ResponseError(xml.Element("error").Value));
                 });
+        }
 
+        /// <summary>
+        /// Sends KeepAlive command to the TD Ameritrade web service, which prevents user's session from expiring.
+        /// </summary>
+        /// <returns>The <see cref="T:Response"/>.</returns>
+        public Response KeepAlive()
+        {
+            return KeepAliveAsync().Result;
+        }
+
+        /// <summary>
+        /// Sends KeepAlive command asynchronously to the TD Ameritrade web service, which prevents user's session from expiring.
+        /// </summary>
+        /// <returns>The <see cref="T:Response"/>.</returns>
+        public Task<Response> KeepAliveAsync()
+        {
+            var url = "https://apis.tdameritrade.com/apps/KeepAlive?source=" + Uri.EscapeDataString(this.App.Key);
+
+            return GetTextAsync(url)
+                .ContinueWith(task =>
+                {
+                    if (new string[] { "LoggedOn", "InvalidSession" }.Contains(task.Result))
+                    {
+                        return new Response();
+                    }
+
+                    return new Response(new ResponseError("Unexpected response received from the web service."));
+                });
         }
 
         /// <summary>
@@ -244,6 +272,48 @@ namespace TDAmeritrade
             }
 
             // TODO: Dispose unmanaged objects.
+        }
+
+        /// <summary>
+        /// Downloads a text string asynchronously.
+        /// </summary>
+        /// <param name="url">The URL of the resource to be downloaded.</param>
+        /// <returns>The <see cref="T:String"/>.</returns>
+        private Task<string> GetTextAsync(string url)
+        {
+            return GetTextAsync(url, null);
+        }
+
+        /// <summary>
+        /// Downloads a text string asynchronously.
+        /// </summary>
+        /// <param name="url">The URL of the resource to be downloaded.</param>
+        /// <param name="data">Optional data to be passed alone with the web request.</param>
+        /// <returns>The <see cref="T:String"/>.</returns>
+        private Task<string> GetTextAsync(string url, object data)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                var webRequest = CreateWebRequest(url);
+
+                if (data == null)
+                {
+                    return webRequest.DownloadDataAsync().ContinueWith<string>(result =>
+                        {
+                            return Encoding.ASCII.GetString(result.Result);
+                        });
+                }
+                else
+                {
+                    return webRequest.PostDataAsync(data).ContinueWith(_ =>
+                    {
+                        return webRequest.DownloadDataAsync().ContinueWith<string>(result =>
+                        {
+                            return Encoding.ASCII.GetString(result.Result);
+                        });
+                    }).Unwrap();
+                }
+            }).Unwrap();
         }
 
         /// <summary>
