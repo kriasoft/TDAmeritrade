@@ -103,7 +103,7 @@ namespace TDAmeritrade
         /// <returns>true if user logged in successfully; false if not</returns>
         public Response<bool> LogIn(string userid, string password)
         {
-            return this.LogInTask(userid, password).Result;
+            return this.LogInAsync(userid, password).Result;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace TDAmeritrade
         /// <param name="userid">The user's ID.</param>
         /// <param name="password">The user's password.</param>
         /// <returns>true if user logged in successfully; false if not</returns>
-        public Task<Response<bool>> LogInTask(string userid, string password)
+        public Task<Response<bool>> LogInAsync(string userid, string password)
         {
             var url = this.Config.ServiceUrl + "LogIn?source=" + Uri.EscapeDataString(this.App.Key) + "&version=" + Uri.EscapeDataString(this.App.Version);
             var data = new { userid = userid, password = password, source = this.App.Key, version = this.App.Version };
