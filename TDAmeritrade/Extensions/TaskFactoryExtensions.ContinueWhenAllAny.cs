@@ -30,6 +30,7 @@ namespace System.Threading.Tasks
         /// Creates a continuation Task that will complete upon
         /// the completion of a set of provided Tasks.
         /// </summary>
+        /// <typeparam name="TAntecedentResult">Specifies the type of Task results for the Tasks created by the new TaskFactory.</typeparam>
         /// <param name="factory">The TaskFactory to use to create the continuation task.</param>
         /// <param name="tasks">The array of tasks from which to continue.</param>
         /// <returns>A task that, when completed, will return the array of completed tasks.</returns>
@@ -54,6 +55,7 @@ namespace System.Threading.Tasks
         /// Creates a continuation Task that will complete upon
         /// the completion of any one of a set of provided Tasks.
         /// </summary>
+        /// <typeparam name="TAntecedentResult">Specifies the type of Task results for the Tasks created by the new TaskFactory.</typeparam>
         /// <param name="factory">The TaskFactory to use to create the continuation task.</param>
         /// <param name="tasks">The array of tasks from which to continue.</param>
         /// <returns>A task that, when completed, will return the completed task.</returns>

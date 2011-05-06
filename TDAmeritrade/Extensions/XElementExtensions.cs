@@ -9,7 +9,8 @@ namespace System.Xml.Linq
 {
     using System;
     using System.Globalization;
-using TDAmeritrade.Models;
+
+    using TDAmeritrade.Models;
 
     /// <summary>
     /// Extension methods for <see cref="XElement"/>.
