@@ -8,18 +8,16 @@
 namespace TDAmeritrade
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Net;
-    using System.Reflection;
-    using System.Runtime.Serialization;
     using System.Text;
     using System.Threading.Tasks;
     using System.Xml.Linq;
 
     using TDAmeritrade.Infrastructure;
     using TDAmeritrade.Models;
-    using System.Collections.ObjectModel;
 
     /// <summary>
     /// TD Ameritrade client library which provides methods for sending data to and
