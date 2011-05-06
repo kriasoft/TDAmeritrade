@@ -3,12 +3,12 @@ TD Ameritrade .NET SDK
 
 **.NET 4.0 based, open source, standards compliant software client application for working with TD Ameritrade API.**
 
-The latest version is at [http://github.com/rialib/tdameritrade](http://github.com/rialib/tdameritrade)
+The latest version is at [http://github.com/kriasoft/tdameritrade](http://github.com/kriasoft/tdameritrade)
 
 Download
 --------
 
- * [TD Ameritrade .NET SDK v1.1.0 Beta.zip](https://github.com/rialib/tdameritrade/raw/master/TD%20Ameritrade%20.NET%20SDK%20v1.1.0%20Beta.zip) (May 06, 2011)
+ * [TD Ameritrade .NET SDK v1.1.0 Beta.zip](https://github.com/kriasoft/tdameritrade/raw/master/TD%20Ameritrade%20.NET%20SDK%20v1.1.0%20Beta.zip) (May 06, 2011)
 
 Technologies used
 -----------------
@@ -19,8 +19,8 @@ Technologies used
 Want to participate in this project?
 ------------------------------------
 
- * Fill free to [fork](https://github.com/rialib/tdameritrade) this repo and [pull back](https://github.com/rialib/tdameritrade/pull/new/master) your updates
- * Participate in [discussions](https://groups.google.com/forum/#!forum/tdasdk), share your feedback, [submit issues](https://github.com/rialib/tdameritrade/issues)
+ * Fill free to [fork](https://github.com/kriasoft/tdameritrade) this repo and [pull back](https://github.com/kriasoft/tdameritrade/pull/new/master) your updates
+ * Participate in [discussions](https://groups.google.com/forum/#!forum/tdasdk), share your feedback, [submit issues](https://github.com/kriasoft/tdameritrade/issues)
  
 Credits
 -------
