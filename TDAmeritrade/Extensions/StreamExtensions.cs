@@ -7,16 +7,18 @@
 
 namespace System.IO
 {
-    using System.Diagnostics.Contracts;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
-using System.Xml.Linq;
-    using System.Xml;
+    using System.Xml.Linq;
 
     /// <summary>Extension methods for asynchronously working with streams.</summary>
     public static class StreamExtensions
     {
-        private const int BUFFER_SIZE = 0x2000;
+        /// <summary>
+        /// The size of the buffer used for reading a <see cref="T:Stream"/>.
+        /// </summary>
+        private const int BufferSize = 0x2000;
 
         /// <summary>
         /// Read from a stream asynchronously.
@@ -116,7 +118,7 @@ using System.Xml.Linq;
         {
             // Create two buffers.  One will be used for the current read operation and one for the current
             // write operation.  We'll continually swap back and forth between them.
-            byte[][] buffers = new byte[2][] { new byte[BUFFER_SIZE], new byte[BUFFER_SIZE] };
+            byte[][] buffers = new byte[2][] { new byte[BufferSize], new byte[BufferSize] };
             int filledBufferNum = 0;
             Task writeTask = null;
 
@@ -142,7 +144,10 @@ using System.Xml.Linq;
                 }
 
                 // If no data was read, nothing more to do.
-                if (readTask.Result <= 0) break;
+                if (readTask.Result <= 0)
+                {
+                    break;
+                }
 
                 // Otherwise, write the written data out to the file
                 writeTask = output.WriteAsync(buffers[filledBufferNum], 0, readTask.Result);
