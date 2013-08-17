@@ -12,9 +12,10 @@ Get the latest version via [NuGet](https://www.nuget.org/packages/TDAmeritrade.C
 ```csharp
 using (var client = new AmeritradeClient())
 {
-    var quotes = client.GetQuotes("GOOG", "AAPL", "MSFT");
-    var symbols = client.FindSymbols("bank");
-    var prices = client.GetHistoricalPrices("GOOG", startDate: DateTime.Now.AddYears(-1));
+    client.LogIn();
+    var quotes = await client.GetQuotes("GOOG", "AAPL", "MSFT");
+    var symbols = await client.FindSymbols("bank");
+    var prices = await client.GetHistoricalPrices("GOOG", startDate: DateTime.Now.AddYears(-1));
 }
 ```
 
@@ -29,4 +30,7 @@ This library is brought to you by Konstantin Tarkus, KriaSoft LLC;
 and released under [Apache License 2.0](https://raw.github.com/kriasoft/tdameritrade/master/LICENSE.txt).
 Logo imags are copyrighted by TD Ameritrade, Inc.
 
+### Contacts
+
 Do you have any questions or need help? Email me at [hello@tarkus.me](mailto:hello@tarkus.me)
+or visit our [discussion board](https://groups.google.com/forum/#!forum/tdasdk).
