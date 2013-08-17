@@ -1,41 +1,32 @@
-TD Ameritrade .NET SDK
-======================
+## TD Ameritrade Client Library for .NET
 
-**.NET 4.0 based, open source, standards compliant software client application for working with TD Ameritrade API.**
+Free, open-source .NET Client for the [TD Ameritrade Trading Platform](https://www.tdameritrade.com/api.page).
+Helps developers integrate TD Ameritrade API into custom trading solutions.
 
-The latest version is at [http://github.com/kriasoft/tdameritrade](http://github.com/kriasoft/tdameritrade)
+### Download
 
-Download
---------
+Get the latest version via [NuGet](https://www.nuget.org/packages/TDAmeritrade.Client/)
 
- * [TD Ameritrade .NET SDK v1.1.0 Beta.zip](https://github.com/kriasoft/tdameritrade/raw/master/TD%20Ameritrade%20.NET%20SDK%20v1.1.0%20Beta.zip) (May 06, 2011)
+### Sample
 
-Technologies used
------------------
+```csharp
+using (var client = new AmeritradeClient())
+{
+    var quotes = client.GetQuotes("GOOG", "AAPL", "MSFT");
+    var symbols = client.FindSymbols("bank");
+    var prices = client.GetHistoricalPrices("GOOG", startDate: DateTime.Now.AddYears(-1));
+}
+```
 
- * [.NET Framework 4.0](http://msdn.microsoft.com/netframework), [C#](http://msdn.microsoft.com/vcsharp)
- * [Task Parallel Library](http://msdn.microsoft.com/en-us/library/dd460717.aspx)
+If you have not specified username/password in code, you will be prompted to enter your
+TD Ameritrade client's credentials at runtime:
 
-Want to participate in this project?
-------------------------------------
+![Login](http://i.imgur.com/GKl4jYw.png)
 
- * Fill free to [fork](https://github.com/kriasoft/tdameritrade) this repo and [pull back](https://github.com/kriasoft/tdameritrade/pull/new/master) your updates
- * Participate in [discussions](https://groups.google.com/forum/#!forum/tdasdk), share your feedback, [submit issues](https://github.com/kriasoft/tdameritrade/issues)
- 
-Credits
--------
+### Credentials
 
-TD Ameritrade .NET SDK is Open Source, developed by Konstantin Tarkus (k.tarkus@kriasoft.com) and released under the terms of the New BSD License.
+This library is brought to you by Konstantin Tarkus, KriaSoft LLC;
+and released under [Apache License 2.0](https://raw.github.com/kriasoft/tdameritrade/master/LICENSE.txt).
+Logo imags are copyrighted by TD Ameritrade, Inc.
 
-License
--------
-
-Copyright © 2011 **KriaSoft, LLC**. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-* Neither the name of the **KriaSoft, LLC** nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Do you have any questions or need help? Email me at [hello@tarkus.me](mailto:hello@tarkus.me)
