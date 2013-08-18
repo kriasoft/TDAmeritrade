@@ -27,7 +27,7 @@ TD Ameritrade client's credentials at runtime:
 
 ### Credits
 
-Copyright (c) 2013 Konstantin Tarkus, KriaSoft LLC
+Copyright (c) 2013 [Konstantin Tarkus](http://www.linkedin.com/in/koistya), [KriaSoft LLC](http://www.kriasoft.com)
 
 This software is released under the Apache License 2.0 (the "License"); you may not use the software
 except in compliance with the License. You can find a copy of the License in the file
