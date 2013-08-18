@@ -53,6 +53,7 @@
       <DependentUpon>LoginScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\HttpClientExtensions.cs" />
     <Compile Include="Models\AssetType.cs" />
     <Compile Include="Models\ErrorQuote.cs" />
