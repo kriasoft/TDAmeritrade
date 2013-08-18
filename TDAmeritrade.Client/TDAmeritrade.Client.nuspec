@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>TDAmeritrade.Client</id>
+        <version>2.0.0-alpha3</version>
+        <title>TD Ameritrade Client Library for .NET</title>
+        <authors>Konstantin Tarkus</authors>
+        <owners>Konstantin Tarkus</owners>
+        <licenseUrl>https://raw.github.com/kriasoft/tdameritrade/master/LICENSE.txt</licenseUrl>
+        <projectUrl>https://github.com/kriasoft/tdameritrade</projectUrl>
+        <iconUrl>http://i.imgur.com/4wxcrN8.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>.NET Client for the TD Ameritrade Trading Platform. Helps developers integrate TD Ameritrade API into custom trading solutions.</description>
+        <copyright>© 2013 Konstantin Tarkus, KriaSoft LLC</copyright>
+        <language>en-US</language>
+        <tags>Finance Markets Trading Quotes</tags>
+    </metadata>
+    <files>
+        <file src="bin\Release\TDAmeritrade.Client.dll" target="lib\TDAmeritrade.Client.dll" />
+        <file src="bin\Release\TDAmeritrade.Client.pdb" target="lib\TDAmeritrade.Client.pdb" />
+    </files>
+</package>
