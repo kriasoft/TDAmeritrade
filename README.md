@@ -25,13 +25,19 @@ TD Ameritrade client's credentials at runtime:
 
 ![Login](http://i.imgur.com/GKl4jYw.png)
 
-### Credentials
+### Credits
 
-This library is brought to you by Konstantin Tarkus, KriaSoft LLC;
-and released under [Apache License 2.0](https://raw.github.com/kriasoft/tdameritrade/master/LICENSE.txt).
-Logo imags are copyrighted by TD Ameritrade, Inc.
+Copyright (c) 2013 Konstantin Tarkus, KriaSoft LLC
+
+This software is released under the Apache License 2.0 (the "License"); you may not use the software
+except in compliance with the License. You can find a copy of the License in the file
+[LICENSE.txt](https://raw.github.com/kriasoft/tdameritrade/master/LICENSE.txt) accompanying this file. 
+
+Logo image is a trademark of TD Ameritrade, Inc.
 
 ### Contacts
 
 Do you have any questions or need help? Email me at [hello@tarkus.me](mailto:hello@tarkus.me)
 or visit our [discussion board](https://groups.google.com/forum/#!forum/tdasdk).
+
+**P.S.**: Your contributions of any kind are welcome!
