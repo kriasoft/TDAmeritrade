@@ -16,6 +16,7 @@ using (var client = new AmeritradeClient())
     var quotes = await client.GetQuotes("GOOG", "AAPL", "MSFT");
     var symbols = await client.FindSymbols("bank");
     var prices = await client.GetHistoricalPrices("GOOG", startDate: DateTime.Now.AddYears(-1));
+    var watchlists = await client.GetWatchlists();
 }
 ```
 

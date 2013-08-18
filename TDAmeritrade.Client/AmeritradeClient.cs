@@ -18,6 +18,7 @@ namespace TDAmeritrade.Client
     using System.Threading.Tasks;
     using System.Xml.Linq;
     using System.Xml.Serialization;
+
     using TDAmeritrade.Client.Controls;
     using TDAmeritrade.Client.Extensions;
     using TDAmeritrade.Client.Models;
@@ -141,7 +142,7 @@ namespace TDAmeritrade.Client
                 throw new ArgumentException(string.Format(Errors.CannotBeNullOrWhitespace, "password"), "password");
             }
 
-            var response = await http.PostAsync(
+            var response = await this.http.PostAsync(
                 "/apps/300/LogIn?source=" + Uri.EscapeDataString(this.key) + "&version=" + Uri.EscapeDataString(this.version),
                 new FormUrlEncodedContent(new[] {
                     new KeyValuePair<string, string>("userid", userName),
@@ -237,7 +238,7 @@ namespace TDAmeritrade.Client
 
         public async Task LogOut()
         {
-            var text = await http.GetStringAsync("/apps/100/LogOut?source=" + Uri.EscapeDataString(this.key));
+            var text = await this.http.GetStringAsync("/apps/100/LogOut?source=" + Uri.EscapeDataString(this.key));
             var xml = XDocument.Parse(text);
 
             if (xml.Root.Element("result").Value == "LoggedOut")
@@ -248,7 +249,9 @@ namespace TDAmeritrade.Client
 
         protected async Task KeepAlive()
         {
-            var text = await http.GetStringAsync("/apps/KeepAlive?source=" + Uri.EscapeDataString(this.key));
+            this.EnsureAuthenticated();
+
+            var text = await this.http.GetStringAsync("/apps/KeepAlive?source=" + Uri.EscapeDataString(this.key));
 
             if (text != "LoggedOn")
             {
@@ -258,9 +261,11 @@ namespace TDAmeritrade.Client
 
         public async Task GetStreamerInfo(string accountID = null)
         {
+            this.EnsureAuthenticated();
+
             var url = "/apps/100/StreamerInfo?source=" + Uri.EscapeDataString(this.key) +
                 (accountID == null ? string.Empty : "&accountid=" + Uri.EscapeDataString(accountID));
-            var text = await http.GetStringAsync(url);
+            var text = await this.http.GetStringAsync(url);
             var xml = XDocument.Parse(text);
 
             if (xml.Root.Element("result").Value == "OK")
@@ -286,9 +291,11 @@ namespace TDAmeritrade.Client
                 return quotes;
             }
 
+            this.EnsureAuthenticated();
+
             var url = "/apps/100/Quote?source=" + Uri.EscapeDataString(this.key) +
                 "&symbol=" + string.Join(",", symbols.Select(x => Uri.EscapeDataString(x.Trim())));
-            var text = await http.GetStringAsync(url);
+            var text = await this.http.GetStringAsync(url);
             var xml = XDocument.Parse(text);
 
             if (xml.Root.Element("result").Value != "OK")
@@ -357,6 +364,8 @@ namespace TDAmeritrade.Client
                 throw new ArgumentException(string.Format(Errors.CannotBeEmpty, "symbols"), "symbols");
             }
 
+            this.EnsureAuthenticated();
+
             var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
 
             var fromDate = startDate.HasValue ? startDate.Value : now;
@@ -368,7 +377,7 @@ namespace TDAmeritrade.Client
 
             var result = new Dictionary<string, Quote[]>();
 
-            using (var stream = await http.GetStreamAsync(url))
+            using (var stream = await this.http.GetStreamAsync(url))
             using (var reader = new BinaryReader(stream))
             {
                 var numSymbols = reader.ReadInt32BE();
@@ -424,7 +433,9 @@ namespace TDAmeritrade.Client
                 throw new ArgumentException(string.Format(Errors.CannotBeNullOrWhitespace, "search"), "search");
             }
 
-            var text = await http.GetStringAsync(
+            this.EnsureAuthenticated();
+
+            var text = await this.http.GetStringAsync(
                 "/apps/100/SymbolLookup?source=" + Uri.EscapeDataString(this.key) +
                 "&matchstring=" + Uri.EscapeDataString(search));
 
@@ -440,6 +451,30 @@ namespace TDAmeritrade.Client
             }
 
             return result;
+        }
+
+        public async Task<List<Watchlist>> GetWatchlists()
+        {
+            this.EnsureAuthenticated();
+
+            var xml = await this.http.GetXmlAsync("/apps/100/GetWatchlists?source=" + Uri.EscapeDataString(this.key));
+
+            if (xml.Root.Element("result").Value != "OK")
+            {
+                throw new ApplicationException();
+            }
+
+            var list = new List<Watchlist>();
+
+            foreach (var node in xml.Root.Element("watchlist-result").Elements("watchlist"))
+            {
+                using (var reader = node.CreateReader())
+                {
+                    list.Add((Watchlist)new XmlSerializer(typeof(Watchlist)).Deserialize(reader));
+                }
+            }
+
+            return list;
         }
 
         public void Dispose()
@@ -471,6 +506,19 @@ namespace TDAmeritrade.Client
             this.UserAccounts = new List<UserAccount>().AsReadOnly();
             this.UserExchangeStatus = UserExchangeStatus.Unknown;
             this.UserAuthorizations = new Dictionary<string, bool>();
+        }
+
+        protected void EnsureAuthenticated()
+        {
+            if (!this.IsAuthenticated)
+            {
+                this.LogIn();
+            }
+
+            if (!this.IsAuthenticated)
+            {
+                throw new AccessViolationException();
+            }
         }
     }
 }
