@@ -20,6 +20,7 @@ namespace TDAmeritrade.Client.Tests
             {
                 var watchlist = await client.GetWatchlists();
                 Assert.IsNotNull(watchlist);
+                Assert.IsTrue(watchlist.Count > 0);
             }
         }
     }

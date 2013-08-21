@@ -8,7 +8,7 @@ namespace TDAmeritrade.Client.Extensions
 {
     using System;
 
-    public class DateTimeExtensions
+    public static class DateTimeExtensions
     {
         private static readonly TimeZoneInfo ServerTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 

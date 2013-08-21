@@ -29,57 +29,57 @@ namespace TDAmeritrade.Client.Models
         public bool StockDirectRouting { get; internal set; }
 
         /// <summary>
-        /// Action used to pre-populate the stock order ticket
+        /// Gets the action used to pre-populate the stock order ticket
         /// </summary>
         public string DefaultStockAction { get; internal set; }
 
         /// <summary>
-        /// Type of order to pre-populate the stock order ticket
+        /// Gets the type of order to pre-populate the stock order ticket
         /// </summary>
         public string DefaultStockOrderType { get; internal set; }
 
         /// <summary>
-        /// Number of shares to pre-populate into the stock order ticket
+        /// Gets the number of shares to pre-populate into the stock order ticket
         /// </summary>
         public string DefaultStockQuantity { get; internal set; }
 
         /// <summary>
-        /// Expiration used to pre-populate the stock order ticket
+        /// Gets the expiration used to pre-populate the stock order ticket
         /// </summary>
         public string DefaultStockExpiration { get; internal set; }
 
         /// <summary>
-        /// Instructions used to pre-populate the stock order ticket
+        /// Gets the list of instructions used to pre-populate the stock order ticket
         /// </summary>
         public string DefaultStockSpecialInstructions { get; internal set; }
 
         /// <summary>
-        /// Routing destination used to pre-populate the stock order ticket
+        /// Gets the routing destination used to pre-populate the stock order ticket
         /// </summary>
         public string DefaultStockRouting { get; internal set; }
 
         /// <summary>
-        /// Display size used with INET direct routing
+        /// Gets the display size used with INET direct routing
         /// </summary>
         public string DefaultStockDisplaySize { get; internal set; }
 
         /// <summary>
-        /// Tax lot methodology used when selling shares
+        /// Gets the tax lot methodology used when selling shares
         /// </summary>
         public string StockTaxLotMethod { get; internal set; }
 
         /// <summary>
-        /// Tax lot methodology used when selling options
+        /// Gets the tax lot methodology used when selling options
         /// </summary>
         public string OptionTaxLotMethod { get; internal set; }
 
         /// <summary>
-        /// Tax lot methodology used when selling mutual funds
+        /// Gets the tax lot methodology used when selling mutual funds
         /// </summary>
         public string MutualFundTaxLotMethod { get; internal set; }
 
         /// <summary>
-        /// Advanced tool launched when logging into the Ameritrade website.
+        /// Gets the advanced tool launched when logging into the Ameritrade website.
         /// </summary>
         public string DefaultAdvancedToolLaunch { get; internal set; }
     }

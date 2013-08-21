@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="User.cs" company="KriaSoft LLC">
+// <copyright file="AvailableQuotes.cs" company="KriaSoft LLC">
 //   Copyright © 2013 Konstantin Tarkus, KriaSoft LLC. See LICENSE.txt
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -14,22 +14,31 @@ namespace TDAmeritrade.Client.Models
         private readonly SortedSet<Markets> realtime = new SortedSet<Markets>();
         private readonly SortedSet<Markets> delayed = new SortedSet<Markets>();
 
+        public List<Markets> All
+        {
+            get { return this.realtime.Union(this.delayed).ToList(); }
+        }
+
+        public List<Markets> RealTime
+        {
+            get { return this.realtime.ToList(); }
+        }
+
+        public List<Markets> Delayed
+        {
+            get { return this.delayed.ToList(); }
+        }
+
         internal void Add(Markets market, bool isRealTime)
         {
             if (isRealTime)
             {
-                realtime.Add(market);
+                this.realtime.Add(market);
             }
             else
             {
-                delayed.Add(market);
+                this.delayed.Add(market);
             }
         }
-
-        public List<Markets> All { get { return this.realtime.Union(this.delayed).ToList(); } }
-
-        public List<Markets> RealTime { get { return this.realtime.ToList(); } }
-
-        public List<Markets> Delayed { get { return this.delayed.ToList(); } }
     }
 }

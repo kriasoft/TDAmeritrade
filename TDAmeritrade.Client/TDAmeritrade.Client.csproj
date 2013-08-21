@@ -69,7 +69,7 @@
     <Compile Include="Models\AccountAuthorizations.cs" />
     <Compile Include="Models\AccountPreferences.cs" />
     <Compile Include="Models\AvailableQuotes.cs" />
-    <Compile Include="Models\ExchangeStatus.cs" />
+    <Compile Include="Models\UserExchangeStatus.cs" />
     <Compile Include="Models\Markets.cs" />
     <Compile Include="Models\OptionTradingType.cs" />
     <Compile Include="Models\RealtimeMarkets.cs" />

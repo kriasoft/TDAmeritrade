@@ -1,7 +1,11 @@
-﻿namespace TDAmeritrade.Client.Utility
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Settings.cs" company="KriaSoft LLC">
+//   Copyright © 2013 Konstantin Tarkus, KriaSoft LLC. See LICENSE.txt
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace TDAmeritrade.Client.Utility
 {
-
-
     using System;
     using System.Security.Cryptography;
     using System.Text;
@@ -71,15 +75,19 @@
 
         private static byte[] GetEntropy()
         {
-            return Get("Entropy", defaultValue: () =>
-            {
-                var val = new byte[20];
-                using (var rng = new RNGCryptoServiceProvider())
+            return Get(
+                "Entropy",
+                defaultValue: () =>
                 {
-                    rng.GetBytes(val);
-                }
-                return val;
-            });
+                    var val = new byte[20];
+
+                    using (var rng = new RNGCryptoServiceProvider())
+                    {
+                        rng.GetBytes(val);
+                    }
+
+                    return val;
+                });
         }
     }
 }

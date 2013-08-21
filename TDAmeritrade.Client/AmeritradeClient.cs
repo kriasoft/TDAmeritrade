@@ -29,6 +29,8 @@ namespace TDAmeritrade.Client
     /// </summary>
     public class AmeritradeClient : IDisposable
     {
+        private readonly HttpClient http;
+
         private readonly string key;
         private readonly string name;
         private readonly string version;
@@ -37,57 +39,6 @@ namespace TDAmeritrade.Client
         private SecureString userID;
         private TimeSpan timeout;
         private StreamerInfo streamerInfo;
-
-        private readonly HttpClient http;
-
-        public string UserID
-        {
-            get
-            {
-                if (userID == null)
-                {
-                    return null;
-                }
-
-                var valuePtr = IntPtr.Zero;
-                try
-                {
-                    valuePtr = Marshal.SecureStringToGlobalAllocUnicode(this.userID);
-                    return Marshal.PtrToStringUni(valuePtr);
-                }
-                finally
-                {
-                    Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
-                }
-            }
-            private set
-            {
-                if (value == null)
-                {
-                    this.userID = null;
-                }
-                else
-                {
-                    this.userID = new SecureString();
-                    foreach (char c in value)
-                    {
-                        this.userID.AppendChar(c);
-                    }
-                }
-            }
-        }
-
-        public UserExchangeStatus UserExchangeStatus { get; private set; }
-
-        public UserAccount UserAccount { get; private set; }
-
-        public Dictionary<string, bool> UserAuthorizations { get; private set; }
-
-        public ReadOnlyCollection<UserAccount> UserAccounts { get; private set; }
-
-        public bool IsAuthenticated { get; private set; }
-
-        public AvailableQuotes AvailableQuotes { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmeritradeClient"/> class.
@@ -124,6 +75,61 @@ namespace TDAmeritrade.Client
             this.Reset();
         }
 
+        ~AmeritradeClient()
+        {
+            this.Dispose(false);
+        }
+
+        public string UserID
+        {
+            get
+            {
+                if (this.userID == null)
+                {
+                    return null;
+                }
+
+                var valuePtr = IntPtr.Zero;
+                try
+                {
+                    valuePtr = Marshal.SecureStringToGlobalAllocUnicode(this.userID);
+                    return Marshal.PtrToStringUni(valuePtr);
+                }
+                finally
+                {
+                    Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
+                }
+            }
+
+            private set
+            {
+                if (value == null)
+                {
+                    this.userID = null;
+                }
+                else
+                {
+                    this.userID = new SecureString();
+                    foreach (char c in value)
+                    {
+                        this.userID.AppendChar(c);
+                    }
+                }
+            }
+        }
+
+        public UserExchangeStatus UserExchangeStatus { get; private set; }
+
+        public UserAccount UserAccount { get; private set; }
+
+        public Dictionary<string, bool> UserAuthorizations { get; private set; }
+
+        public ReadOnlyCollection<UserAccount> UserAccounts { get; private set; }
+
+        public bool IsAuthenticated { get; private set; }
+
+        public AvailableQuotes AvailableQuotes { get; private set; }
+
         public bool LogIn()
         {
             var login = new LoginScreen(this);
@@ -144,7 +150,8 @@ namespace TDAmeritrade.Client
 
             var response = await this.http.PostAsync(
                 "/apps/300/LogIn?source=" + Uri.EscapeDataString(this.key) + "&version=" + Uri.EscapeDataString(this.version),
-                new FormUrlEncodedContent(new[] {
+                new FormUrlEncodedContent(new[]
+                {
                     new KeyValuePair<string, string>("userid", userName),
                     new KeyValuePair<string, string>("password", password),
                     new KeyValuePair<string, string>("source", this.key),
@@ -155,7 +162,7 @@ namespace TDAmeritrade.Client
             var text = await response.Content.ReadAsStringAsync();
             var xml = XDocument.Parse(text);
 
-            if (this.IsAuthenticated = (xml.Root.Element("result").Value == "OK"))
+            if (this.IsAuthenticated = xml.Root.Element("result").Value == "OK")
             {
                 var node = xml.Root.Element("xml-log-in");
                 this.UserID = node.Element("user-id").Value;
@@ -174,9 +181,15 @@ namespace TDAmeritrade.Client
 
                 switch (node.Element("exchange-status").Value)
                 {
-                    case "non-professional": this.UserExchangeStatus = UserExchangeStatus.NonProfessional; break;
-                    case "professional": this.UserExchangeStatus = UserExchangeStatus.Professional; break;
-                    default: this.UserExchangeStatus = UserExchangeStatus.Unknown; break;
+                    case "non-professional":
+                        this.UserExchangeStatus = UserExchangeStatus.NonProfessional;
+                        break;
+                    case "professional":
+                        this.UserExchangeStatus = UserExchangeStatus.Professional;
+                        break;
+                    default:
+                        this.UserExchangeStatus = UserExchangeStatus.Unknown;
+                        break;
                 }
 
                 this.UserAccounts = node.Element("accounts").Elements().Select(n =>
@@ -218,6 +231,7 @@ namespace TDAmeritrade.Client
                         case "full": account.Authorizations.OptionTrading = OptionTradingType.Full; break;
                         default: account.Authorizations.OptionTrading = OptionTradingType.None; break;
                     }
+
                     account.Authorizations.Streamer = authNode.Element("streamer").Value == "true";
                     account.Authorizations.AdvancedMargin = authNode.Element("advanced-margin").Value == "true";
 
@@ -247,7 +261,7 @@ namespace TDAmeritrade.Client
             }
         }
 
-        protected async Task KeepAlive()
+        public async Task KeepAlive()
         {
             this.EnsureAuthenticated();
 
@@ -389,6 +403,7 @@ namespace TDAmeritrade.Client
                     if (reader.ReadByte() == 1 /* has error */)
                     {
                         var error = Encoding.ASCII.GetString(reader.ReadBytes(reader.ReadInt16BE()));
+                        
                         // TODO: Handle error
                         continue;
                     }
@@ -483,16 +498,19 @@ namespace TDAmeritrade.Client
             GC.SuppressFinalize(this);
         }
 
-        ~AmeritradeClient()
+        protected virtual void Dispose(bool freeManagedObjects)
         {
-            this.Dispose(false);
-        }
-
-        protected void Dispose(bool freeManagedObjects)
-        {
-            if (freeManagedObjects && this.http != null)
+            if (freeManagedObjects)
             {
-                this.http.Dispose();
+                if (this.http != null)
+                {
+                    this.http.Dispose();
+                }
+
+                if (this.userID != null)
+                {
+                    this.userID.Dispose();
+                }
             }
         }
 

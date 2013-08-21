@@ -1,4 +1,10 @@
-﻿namespace TDAmeritrade.Client.Controls
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="LoginScreen.xaml.cs" company="KriaSoft LLC">
+//   Copyright © 2013 Konstantin Tarkus, KriaSoft LLC. See LICENSE.txt
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace TDAmeritrade.Client.Controls
 {
     using System.Windows;
     using System.Windows.Input;
@@ -17,7 +23,7 @@
 
         public LoginScreen()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             this.UserName.Text = Settings.GetProtected(UserNameKey);
             this.RememberUserName.IsChecked = Settings.Get(RememberUserNameKey, defaultValue: true);

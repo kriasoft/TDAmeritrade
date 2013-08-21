@@ -1,4 +1,10 @@
-﻿using System.Reflection;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AssemblyInfo.cs" company="KriaSoft LLC">
+//   Copyright © 2013 Konstantin Tarkus, KriaSoft LLC. See LICENSE.txt
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

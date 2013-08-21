@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Account.cs" company="KriaSoft LLC">
+// <copyright file="UserAccount.cs" company="KriaSoft LLC">
 //   Copyright © 2013 Konstantin Tarkus, KriaSoft LLC. See LICENSE.txt
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ namespace TDAmeritrade.Client.Models
         public string Description { get; internal set; }
 
         /// <summary>
-        /// Gets a value indicates whether or not this account is the main account associated with the User ID/LogIn session.
+        /// Gets a value indicating whether or not this account is the main account associated with the User ID/LogIn session.
         /// </summary>
         public bool IsAssociatedAccount { get; internal set; }
 
@@ -63,7 +63,7 @@ namespace TDAmeritrade.Client.Models
         public AccountPreferences Preferences { get; private set; }
 
         /// <summary>
-        /// Get a list of authorizations for the given account.
+        /// Gets a list of authorizations for the given account.
         /// </summary>
         public AccountAuthorizations Authorizations { get; private set; }
     }

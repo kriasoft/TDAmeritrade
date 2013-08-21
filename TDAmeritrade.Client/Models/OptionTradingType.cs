@@ -13,25 +13,10 @@ namespace TDAmeritrade.Client.Models
     /// </summary>
     public enum OptionTradingType
     {
-        /// <summary>
-        /// None
-        /// </summary>
         None,
-        /// <summary>
-        /// Long
-        /// </summary>
         Long,
-        /// <summary>
-        /// Covered
-        /// </summary>
         Covered,
-        /// <summary>
-        /// Spread
-        /// </summary>
         Spread,
-        /// <summary>
-        /// Full
-        /// </summary>
         Full
     }
 }
