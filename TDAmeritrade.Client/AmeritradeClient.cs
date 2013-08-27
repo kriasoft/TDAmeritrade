@@ -263,7 +263,7 @@ namespace TDAmeritrade.Client
 
         public async Task KeepAlive()
         {
-            this.EnsureAuthenticated();
+            this.EnsureIsAuthenticated();
 
             var text = await this.http.GetStringAsync("/apps/KeepAlive?source=" + Uri.EscapeDataString(this.key));
 
@@ -275,7 +275,7 @@ namespace TDAmeritrade.Client
 
         public async Task GetStreamerInfo(string accountID = null)
         {
-            this.EnsureAuthenticated();
+            this.EnsureIsAuthenticated();
 
             var url = "/apps/100/StreamerInfo?source=" + Uri.EscapeDataString(this.key) +
                 (accountID == null ? string.Empty : "&accountid=" + Uri.EscapeDataString(accountID));
@@ -305,7 +305,7 @@ namespace TDAmeritrade.Client
                 return quotes;
             }
 
-            this.EnsureAuthenticated();
+            this.EnsureIsAuthenticated();
 
             var url = "/apps/100/Quote?source=" + Uri.EscapeDataString(this.key) +
                 "&symbol=" + string.Join(",", symbols.Select(x => Uri.EscapeDataString(x.Trim())));
@@ -378,7 +378,7 @@ namespace TDAmeritrade.Client
                 throw new ArgumentException(string.Format(Errors.CannotBeEmpty, "symbols"), "symbols");
             }
 
-            this.EnsureAuthenticated();
+            this.EnsureIsAuthenticated();
 
             var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
 
@@ -448,7 +448,7 @@ namespace TDAmeritrade.Client
                 throw new ArgumentException(string.Format(Errors.CannotBeNullOrWhitespace, "search"), "search");
             }
 
-            this.EnsureAuthenticated();
+            this.EnsureIsAuthenticated();
 
             var text = await this.http.GetStringAsync(
                 "/apps/100/SymbolLookup?source=" + Uri.EscapeDataString(this.key) +
@@ -470,7 +470,7 @@ namespace TDAmeritrade.Client
 
         public async Task<List<Watchlist>> GetWatchlists()
         {
-            this.EnsureAuthenticated();
+            this.EnsureIsAuthenticated();
 
             var xml = await this.http.GetXmlAsync("/apps/100/GetWatchlists?source=" + Uri.EscapeDataString(this.key));
 
@@ -504,9 +504,14 @@ namespace TDAmeritrade.Client
 
         public async Task<Watchlist> CreateWatchlist(string name, params WatchlistItem[] items)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (name == null)
             {
-                throw new ArgumentException(string.Format(Errors.CannotBeNullOrWhitespace, "name"), "name");
+                throw new ArgumentNullException("name");
+            }
+
+            if (name.Trim() == string.Empty)
+            {
+                throw new ArgumentException(string.Format(Errors.CannotBeEmpty, "name"), "name");
             }
 
             if (items == null)
@@ -519,7 +524,7 @@ namespace TDAmeritrade.Client
                 throw new ArgumentException(string.Format(Errors.CannotBeEmpty, "items"), "items");
             }
 
-            this.EnsureAuthenticated();
+            this.EnsureIsAuthenticated();
 
             var xml = await this.http.GetXmlAsync("/apps/100/CreateWatchlist?source=" + Uri.EscapeDataString(this.key) +
                       "&watchlistname=" + Uri.EscapeDataString(name) +
@@ -534,6 +539,34 @@ namespace TDAmeritrade.Client
             {
                 return (Watchlist)new XmlSerializer(typeof(Watchlist)).Deserialize(reader);
             }
+        }
+
+        public async Task<bool> DeleteWatchlists(string watchlistID, string accountID = null)
+        {
+            if (watchlistID == null)
+            {
+                throw new ArgumentNullException("watchlistID");
+            }
+
+            if (watchlistID.Trim() == string.Empty)
+            {
+                throw new ArgumentException(string.Format(Errors.CannotBeEmpty, "watchlistID"), "watchlistID");
+            }
+
+            if (accountID != null && accountID.Trim() == string.Empty)
+            {
+                throw new ArgumentException(string.Format(Errors.CannotBeEmpty, "accountID"), "accountID");
+            }
+
+            this.EnsureIsAuthenticated();
+
+            var url = "/apps/100/DeleteWatchlist?source=" +
+                      Uri.EscapeDataString(this.key) + "&listid=" + Uri.EscapeDataString(watchlistID) +
+                      (string.IsNullOrWhiteSpace(accountID) ? string.Empty : "&accountid=" + accountID);
+            
+            var xml = await this.http.GetXmlAsync(url);
+
+            return xml.Root.Element("result").Value != "OK";
         }
 
         public void Dispose()
@@ -570,7 +603,7 @@ namespace TDAmeritrade.Client
             this.UserAuthorizations = new Dictionary<string, bool>();
         }
 
-        protected void EnsureAuthenticated()
+        protected void EnsureIsAuthenticated()
         {
             if (!this.IsAuthenticated)
             {
