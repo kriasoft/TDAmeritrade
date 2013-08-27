@@ -492,6 +492,50 @@ namespace TDAmeritrade.Client
             return list;
         }
 
+        public Task<Watchlist> CreateWatchlist(string name, params string[] items)
+        {
+            if (items == null)
+            {
+                throw new ArgumentNullException("items");
+            }
+
+            return this.CreateWatchlist(name, items.Select(x => new WatchlistItem { Symbol = x }).ToArray());
+        }
+
+        public async Task<Watchlist> CreateWatchlist(string name, params WatchlistItem[] items)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException(string.Format(Errors.CannotBeNullOrWhitespace, "name"), "name");
+            }
+
+            if (items == null)
+            {
+                throw new ArgumentNullException("items");
+            }
+
+            if (items.Length == 0)
+            {
+                throw new ArgumentException(string.Format(Errors.CannotBeEmpty, "items"), "items");
+            }
+
+            this.EnsureAuthenticated();
+
+            var xml = await this.http.GetXmlAsync("/apps/100/CreateWatchlist?source=" + Uri.EscapeDataString(this.key) +
+                      "&watchlistname=" + Uri.EscapeDataString(name) +
+                      "&symbollist=" + string.Join(",", items.Select(x => Uri.EscapeDataString(x.Symbol))));
+
+            if (xml.Root.Element("result").Value != "OK")
+            {
+                throw new ApplicationException();
+            }
+
+            using (var reader = xml.Root.Element("created-watchlist").CreateReader())
+            {
+                return (Watchlist)new XmlSerializer(typeof(Watchlist)).Deserialize(reader);
+            }
+        }
+
         public void Dispose()
         {
             this.Dispose(true);
