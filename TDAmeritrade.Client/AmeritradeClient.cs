@@ -468,6 +468,40 @@ namespace TDAmeritrade.Client
             return result;
         }
 
+        public Task<bool> CancelOrder(string orderID)
+        {
+            return CancelOrder(null, orderID);
+        }
+
+
+        public async Task<bool> CancelOrder(string accountID, string orderID)
+        {
+            if (orderID == null)
+            {
+                throw new ArgumentNullException("orderID");
+            }
+
+            if (orderID.Trim() == string.Empty)
+            {
+                throw new ArgumentException(string.Format(Errors.CannotBeEmpty, "orderID"), "orderID");
+            }
+
+            if (accountID != null && accountID.Trim() == string.Empty)
+            {
+                throw new ArgumentException(string.Format(Errors.CannotBeEmpty, "accountID"), "accountID");
+            }
+
+            this.EnsureIsAuthenticated();
+
+            var url = "/apps/100/OrderCancel?source=" + Uri.EscapeDataString(this.key) +
+                      (string.IsNullOrWhiteSpace(accountID) ? string.Empty : "&accountid=" + accountID) +
+                      "&orderid=" + Uri.EscapeDataString(orderID);
+
+            var xml = await this.http.GetXmlAsync(url);
+
+            return xml.Root.Element("result").Value != "OK" && xml.Root.Element("order").Element("error").Value == string.Empty;
+        }
+
         public async Task<List<Watchlist>> GetWatchlists()
         {
             this.EnsureIsAuthenticated();
